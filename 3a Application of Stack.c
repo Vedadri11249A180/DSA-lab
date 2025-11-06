@@ -1,104 +1,120 @@
-#include &lt;stdio.h&gt;
-#include &lt;ctype.h&gt; // for isalpha() and isdigit()
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <ctype.h>  
+#include <string.h>
 #define MAX 100
+
 typedef struct {
-char arr[MAX];
-int top;
+    char arr[MAX];
+    int top;
 } Stack;
+
+
 void init(Stack *s) {
-s-&gt;top = -1;
+    s->top = -1;
 }
+
+
 int isEmpty(Stack *s) {
-return s-&gt;top == -1;
+    return s->top == -1;
 }
+
+
 int isFull(Stack *s) {
-return s-&gt;top == MAX - 1;
+    return s->top == MAX - 1;
 }
+
+
 void push(Stack *s, char c) {
-if (!isFull(s)) {
-s-&gt;arr[++(s-&gt;top)] = c;
+    if (!isFull(s)) {
+        s->arr[++(s->top)] = c;
+    }
 }
-}
+
+
 char pop(Stack *s) {
-if (!isEmpty(s)) {
-return s-&gt;arr[(s-&gt;top)--];
+    if (!isEmpty(s)) {
+        return s->arr[(s->top)--];
+    }
+    return '\0'; // stack empty
 }
-return &#39;\0&#39;; // stack empty
-}
+
 char peek(Stack *s) {
+    if (!isEmpty(s)) {
+        return s->arr[s->top];
+    }
+    return '\0';
+}
 
-if (!isEmpty(s)) {
-return s-&gt;arr[s-&gt;top];
-}
-return &#39;\0&#39;;
-}
-// Function to return precedence of operators
 int precedence(char op) {
-switch (op) {
-case &#39;+&#39;:
-case &#39;-&#39;: return 1;
-case &#39;*&#39;:
-case &#39;/&#39;: return 2;
-case &#39;^&#39;: return 3;
+    switch (op) {
+        case '+':
+        case '-': return 1;
+        case '*':
+        case '/': return 2;
+        case '^': return 3;
+    }
+    return 0;
 }
-return 0;
-}
-// Check if character is operator
+
 int isOperator(char c) {
-return c == &#39;+&#39; || c == &#39;-&#39; || c == &#39;*&#39; || c == &#39;/&#39; || c == &#39;^&#39;;
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
 }
+
 void infixToPostfix(char* infix, char* postfix) {
-Stack s;
-init(&amp;s);
-int k = 0; // Index for postfix
-for (int i = 0; infix[i] != &#39;\0&#39;; i++) {
-char c = infix[i];
-// If operand (letter or digit), add to postfix
-if (isalnum(c)) {
-postfix[k++] = c;
-}
-// If &#39;(&#39;, push to stack
+    Stack s;
+    init(&s);
+    int k = 0; // Index for postfix
 
-else if (c == &#39;(&#39;) {
-push(&amp;s, c);
-}
-// If &#39;)&#39;, pop and output until &#39;(&#39;
-else if (c == &#39;)&#39;) {
-while (!isEmpty(&amp;s) &amp;&amp; peek(&amp;s) != &#39;(&#39;) {
-postfix[k++] = pop(&amp;s);
-}
-pop(&amp;s); // Remove &#39;(&#39; from stack
-}
-// If operator
-else if (isOperator(c)) {
-while (!isEmpty(&amp;s) &amp;&amp; precedence(peek(&amp;s)) &gt;= precedence(c)) {
-if (c == &#39;^&#39; &amp;&amp; peek(&amp;s) == &#39;^&#39;) {
-// Right associative operator &#39;^&#39; should not pop same precedence
-operator
-break;
-} else {
-postfix[k++] = pop(&amp;s);
-}
-}
-push(&amp;s, c);
-}
-}
+    for (int i = 0; infix[i] != '\0'; i++) {
+        char c = infix[i];
 
-// Pop all remaining operators
-while (!isEmpty(&amp;s)) {
-postfix[k++] = pop(&amp;s);
-}
-postfix[k] = &#39;\0&#39;; // Null-terminate postfix string
+      if (isalnum(c)) {
+            postfix[k++] = c;
+        }
+       
+        else if (c == '(') {
+            push(&s, c);
+        }
+     
+        else if (c == ')') {
+            while (!isEmpty(&s) && peek(&s) != '(') {
+                postfix[k++] = pop(&s);
+            }
+            pop(&s); // Remove '(' from stack
+        }
+        
+        else if (isOperator(c)) {
+            while (!isEmpty(&s) && precedence(peek(&s)) >= precedence(c)) {
+               
+                if (c == '^' && peek(&s) == '^') {
+                    break;
+                } else {
+                    postfix[k++] = pop(&s);
+                }
+            }
+            push(&s, c);
+        }
+    }
+
+   
+    while (!isEmpty(&s)) {
+        postfix[k++] = pop(&s);
+    }
+
+    postfix[k] = '\0'; // Null-terminate postfix string
 }
 
 int main() {
-char infix[MAX];
-char postfix[MAX];
-printf(&quot;Enter infix expression: &quot;);
-fgets(infix, MAX, stdin);
-infix[strcspn(infix, &quot;\n&quot;)] = &#39;\0&#39;; // Remove trailing newline
-infixToPostfix(infix, postfix);
-printf(&quot;Postfix expression: %s\n&quot;, postfix);
-return 0;
+    char infix[MAX];
+    char postfix[MAX];
+
+    printf("Enter infix expression: ");
+    fgets(infix, MAX, stdin);
+    infix[strcspn(infix, "\n")] = '\0'; // Remove trailing newline
+
+    infixToPostfix(infix, postfix);
+
+    printf("Postfix expression: %s\n", postfix);
+
+    return 0;
 }
