@@ -5,10 +5,10 @@ int binarySearch(int arr[], int n, int target) {
     int high = n - 1;
 
     while (low <= high) {
-        int mid = low + (high - low) / 2; // To avoid overflow
+        int mid = low + (high - low) / 2; 
 
         if (arr[mid] == target) {
-            return mid; // Found the target
+            return mid; 
         } else if (arr[mid] < target) {
             low = mid + 1;
         } else {
@@ -16,7 +16,7 @@ int binarySearch(int arr[], int n, int target) {
         }
     }
 
-    return -1; // Not found
+    return -1; 
 }
 
 int main() {
