@@ -7,23 +7,23 @@ typedef struct {
     int rear;
 } Queue;
 
-// Initialize queue
+
 void init(Queue *q) {
     q->front = -1;
     q->rear = -1;
 }
 
-// Check if queue is empty
+
 int isEmpty(Queue *q) {
     return q->front == -1;
 }
 
-// Check if queue is full
+
 int isFull(Queue *q) {
     return (q->rear + 1) % MAX == q->front;
 }
 
-// Enqueue element
+
 void enqueue(Queue *q, int value) {
     if (isFull(q)) {
         printf("Queue Overflow! Cannot enqueue %d\n", value);
@@ -39,7 +39,7 @@ void enqueue(Queue *q, int value) {
     printf("Enqueued %d\n", value);
 }
 
-// Dequeue element
+
 int dequeue(Queue *q) {
     if (isEmpty(q)) {
         printf("Queue Underflow! Cannot dequeue\n");
@@ -48,7 +48,7 @@ int dequeue(Queue *q) {
 
     int value = q->arr[q->front];
     if (q->front == q->rear) {
-        // Queue has only one element, reset after dequeue
+       
         q->front = -1;
         q->rear = -1;
     } else {
@@ -57,7 +57,7 @@ int dequeue(Queue *q) {
     return value;
 }
 
-// Peek at the front element
+
 int peek(Queue *q) {
     if (isEmpty(q)) {
         printf("Queue is empty\n");
