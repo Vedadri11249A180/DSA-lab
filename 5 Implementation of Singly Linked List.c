@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the node structure
+
 typedef struct Node {
     int data;
     struct Node* next;
 } Node;
 
-// Insert at the beginning
+
 void insertAtBeginning(Node** head, int value) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = value;
@@ -15,7 +15,7 @@ void insertAtBeginning(Node** head, int value) {
     *head = newNode;
 }
 
-// Insert at the end
+
 void insertAtEnd(Node** head, int value) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = value;
@@ -33,7 +33,7 @@ void insertAtEnd(Node** head, int value) {
     temp->next = newNode;
 }
 
-// Display the linked list
+
 void displayList(Node* head) {
     if (head == NULL) {
         printf("List is empty.\n");
@@ -49,12 +49,12 @@ void displayList(Node* head) {
     printf("NULL\n");
 }
 
-// Delete node by value
+
 void deleteNode(Node** head, int value) {
     Node* temp = *head;
     Node* prev = NULL;
 
-    // If head node itself holds the value
+    
     if (temp != NULL && temp->data == value) {
         *head = temp->next;
         free(temp);
@@ -62,19 +62,19 @@ void deleteNode(Node** head, int value) {
         return;
     }
 
-    // Search for the value
+    
     while (temp != NULL && temp->data != value) {
         prev = temp;
         temp = temp->next;
     }
 
-    // If value not found
+   
     if (temp == NULL) {
         printf("Value %d not found in the list.\n", value);
         return;
     }
 
-    // Unlink the node and free memory
+   
     prev->next = temp->next;
     free(temp);
     printf("Deleted %d from the list.\n", value);
