@@ -1,78 +1,93 @@
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 #define MAX 100
+
 typedef struct {
-char arr[MAX];
-int top;
+    char arr[MAX];
+    int top;
 } Stack;
+
+
 void init(Stack *s) {
-s-&gt;top = -1;
+    s->top = -1;
 }
+
+
 int isEmpty(Stack *s) {
-
-return s-&gt;top == -1;
+    return s->top == -1;
 }
+
+
 int isFull(Stack *s) {
-return s-&gt;top == MAX - 1;
+    return s->top == MAX - 1;
 }
+
+
 void push(Stack *s, char c) {
-if (isFull(s)) {
-printf(&quot;Stack Overflow\n&quot;);
-return;
+    if (isFull(s)) {
+        printf("Stack Overflow\n");
+        return;
+    }
+    s->arr[++(s->top)] = c;
 }
-s-&gt;arr[++(s-&gt;top)] = c;
-}
+
+
 char pop(Stack *s) {
-if (isEmpty(s)) {
-return &#39;\0&#39;; // Empty stack
+    if (isEmpty(s)) {
+        return '\0'; // Empty stack
+    }
+    return s->arr[(s->top)--];
 }
-return s-&gt;arr[(s-&gt;top)--];
-}
+
+
 int isMatchingPair(char open, char close) {
-return (open == &#39;(&#39; &amp;&amp; close == &#39;)&#39;) ||
-(open == &#39;{&#39; &amp;&amp; close == &#39;}&#39;) ||
-(open == &#39;[&#39; &amp;&amp; close == &#39;]&#39;);
+    return (open == '(' && close == ')') ||
+           (open == '{' && close == '}') ||
+           (open == '[' && close == ']');
 }
+
+
 int areParenthesesBalanced(char *expr) {
-Stack s;
-init(&amp;s);
-for (int i = 0; expr[i] != &#39;\0&#39;; i++) {
-char ch = expr[i];
-// If opening bracket, push it
-if (ch == &#39;(&#39; || ch == &#39;{&#39; || ch == &#39;[&#39;) {
-push(&amp;s, ch);
+    Stack s;
+    init(&s);
 
-}
-// If closing bracket, stack must not be empty and top must match
-else if (ch == &#39;)&#39; || ch == &#39;}&#39; || ch == &#39;]&#39;) {
-if (isEmpty(&amp;s)) {
-return 0; // No matching opening bracket
-}
-char topChar = pop(&amp;s);
-if (!isMatchingPair(topChar, ch)) {
-return 0; // Mismatched pair
-}
-}
-}
+    for (int i = 0; expr[i] != '\0'; i++) {
+        char ch = expr[i];
 
-// At the end, stack should be empty if balanced
-return isEmpty(&amp;s);
+        // If opening bracket, push it
+        if (ch == '(' || ch == '{' || ch == '[') {
+            push(&s, ch);
+        }
+        
+        else if (ch == ')' || ch == '}' || ch == ']') {
+            if (isEmpty(&s)) {
+                return 0; // No matching opening bracket
+            }
+            char topChar = pop(&s);
+            if (!isMatchingPair(topChar, ch)) {
+                return 0; // Mismatched pair
+            }
+        }
+    }
+
+   
+    return isEmpty(&s);
 }
 
 int main() {
-char expr[MAX];
+    char expr[MAX];
 
-printf(&quot;Enter expression: &quot;);
-fgets(expr, MAX, stdin);
+    printf("Enter expression: ");
+    fgets(expr, MAX, stdin);
 
-// Remove trailing newline if present
-expr[strcspn(expr, &quot;\n&quot;)] = &#39;\0&#39;;
+   
+    expr[strcspn(expr, "\n")] = '\0';
 
-if (areParenthesesBalanced(expr)) {
-printf(&quot;Parentheses are balanced.\n&quot;);
-} else {
-printf(&quot;Parentheses are NOT balanced.\n&quot;);
-}
+    if (areParenthesesBalanced(expr)) {
+        printf("Parentheses are balanced.\n");
+    } else {
+        printf("Parentheses are NOT balanced.\n");
+    }
 
-return 0;
+    return 0;
 }
